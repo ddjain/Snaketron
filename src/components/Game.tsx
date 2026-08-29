@@ -105,8 +105,8 @@ export function Game({
       </div>
       <p className="controls" aria-label="Keyboard controls">
         {role === "host"
-          ? "You are Player 1. Move with W A S D."
-          : "You are Player 2. Move with the arrow keys."}
+          ? "You are Player 1. Steer with W A S D or the buttons below."
+          : "You are Player 2. Steer with arrow keys or the buttons below."}
       </p>
       <p className="legend">
         Green snake: Player 1 (WASD). Blue snake: Player 2 (arrows). Eat fruit to grow.

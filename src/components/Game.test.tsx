@@ -58,12 +58,12 @@ describe("Game", () => {
 
   it("shows host controls for player 1", () => {
     renderGame({ role: "host" });
-    expect(screen.getByText("You are Player 1. Move with W A S D.")).toBeInTheDocument();
+    expect(screen.getByText("You are Player 1. Steer with W A S D or the buttons below.")).toBeInTheDocument();
   });
 
   it("shows guest controls for player 2", () => {
     renderGame({ role: "guest" });
-    expect(screen.getByText("You are Player 2. Move with the arrow keys.")).toBeInTheDocument();
+    expect(screen.getByText("You are Player 2. Steer with arrow keys or the buttons below.")).toBeInTheDocument();
   });
 
   it("shows the last pressed direction as feedback", () => {
