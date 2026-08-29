@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#070b14"/>
+  <circle cx="96" cy="96" r="7" fill="#1d2b4a"/>
+  <circle cx="424" cy="388" r="5" fill="#1d2b4a"/>
+  <defs>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <path d="M150 330 H350 V210 H180" fill="none" stroke="#3dff8a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="M150 330 H350 V210 H180" fill="none" stroke="#3dff8a" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="150" cy="330" r="40" fill="#b6ffd4"/>
+  <circle cx="168" cy="316" r="9" fill="#070b14"/>
+  <circle cx="168" cy="344" r="9" fill="#070b14"/>
+  <circle cx="248" cy="140" r="30" fill="#ff5c7a"/>
+</svg>

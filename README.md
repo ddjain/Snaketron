@@ -35,6 +35,10 @@ npm run dev
 
 Open the printed local URL (typically `http://localhost:5173`).
 
+### Install as an app
+
+The live site shells out as a Progressive Web App. On phone or desktop, open `https://ddjain.github.io/Snaketron/`, then use the browser's **Install app** / **Add to Home Screen** action. It launches fullscreen (no browser chrome), works offline after the first visit, and updates automatically.
+
 ## Test
 
 ```bash

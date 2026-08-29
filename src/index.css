@@ -293,3 +293,23 @@ h1 {
     flex-direction: column;
   }
 }
+
+html {
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+.dpad {
+  margin-bottom: env(safe-area-inset-bottom);
+}
+
+.board-wrap,
+.dpad {
+  -webkit-touch-callout: none;
+}
