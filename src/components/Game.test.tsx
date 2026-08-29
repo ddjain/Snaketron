@@ -27,6 +27,7 @@ function renderGame(overrides: Partial<Parameters<typeof Game>[0]>) {
       result={null}
       disconnectNote={null}
       connectionStatus="Connected"
+      hintDirection={null}
       onPlayAgain={() => {}}
       onHome={() => {}}
       {...overrides}
@@ -62,6 +63,12 @@ describe("Game", () => {
   it("shows guest controls for player 2", () => {
     renderGame({ role: "guest" });
     expect(screen.getByText("You are Player 2. Move with the arrow keys.")).toBeInTheDocument();
+  });
+
+  it("shows the last pressed direction as feedback", () => {
+    renderGame({ hintDirection: "UP" });
+    expect(screen.getByRole("status")).toHaveTextContent("Connected");
+    expect(screen.getByRole("status")).toHaveTextContent("last input ▲");
   });
 
   it("shows the game-over dialog when the game is finished", () => {

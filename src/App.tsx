@@ -57,6 +57,7 @@ export default function App() {
       result={state.result}
       disconnectNote={state.disconnectNote}
       connectionStatus={state.connectionStatus}
+      hintDirection={state.hintDirection}
       onPlayAgain={playAgain}
       onHome={goHome}
     />

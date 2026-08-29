@@ -66,7 +66,7 @@ The production build is a static frontend. PeerJS still uses the public PeerJS c
 
 ## Limitations
 
-- Peer-to-peer WebRTC is not guaranteed on every network (symmetric NAT, strict firewalls). TURN is out of scope for MVP; connection failure is shown in the UI.
+- Peer-to-peer WebRTC is not guaranteed on every network (symmetric NAT, strict firewalls). The client ships with Google STUN plus the Open Relay public TURN relay so the guest's input can usually traverse NAT. For reliable play anywhere, override with your own TURN credentials (`VITE_PEERJS_TURN_URL`, `VITE_PEERJS_TURN_USERNAME`, `VITE_PEERJS_TURN_PASSWORD` at build time).
 - If the **host** disconnects, the game ends. There is no host migration or reconnection.
 - If the **guest** disconnects during play, the host wins by disconnect.
 - Only two players. A third join is rejected (`GAME_FULL`).

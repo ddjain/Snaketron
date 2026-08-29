@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { COLS, ROWS } from "../game/constants.ts";
-import type { GameResult, GameState } from "../game/types.ts";
+import type { Direction, GameResult, GameState } from "../game/types.ts";
 import { renderGame, sizeCanvas } from "../rendering/canvasRenderer.ts";
 import type { Role } from "../session/useGameSession.ts";
 import { GameOver } from "./GameOver.tsx";
@@ -14,8 +14,16 @@ type GameProps = {
   result: GameResult | null;
   disconnectNote: string | null;
   connectionStatus: string;
+  hintDirection: Direction | null;
   onPlayAgain: () => void;
   onHome: () => void;
+};
+
+const DIRECTION_GLYPH: Record<Direction, string> = {
+  UP: "▲",
+  DOWN: "▼",
+  LEFT: "◀",
+  RIGHT: "▶",
 };
 
 export function Game({
@@ -26,6 +34,7 @@ export function Game({
   result,
   disconnectNote,
   connectionStatus,
+  hintDirection,
   onPlayAgain,
   onHome,
 }: GameProps) {
@@ -65,6 +74,7 @@ export function Game({
         <h1>SNAKE HUNT</h1>
         <p className="status" role="status" aria-live="polite">
           {connectionStatus}
+          {hintDirection ? ` · last input ${DIRECTION_GLYPH[hintDirection]}` : ""}
         </p>
       </header>
       <Scoreboard gameState={gameState} />
