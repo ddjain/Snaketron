@@ -374,22 +374,33 @@ body {
   background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
 }
 
-/* Phone portrait: use almost the full width and go as tall as the slim
-   d-pad below allows, so the play area is as large as possible. */
+/* Phone portrait: strip the top chrome so the play area fills the whole
+   width and as much height as the slim d-pad below allows. */
 @media (max-width: 640px) {
+  .game-screen {
+    justify-content: flex-start;
+  }
+
+  .game-header,
+  .scoreboard {
+    display: none;
+  }
+
   .board-wrap {
     --board-h: max(
       0px,
-      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 17rem)
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 11rem)
     );
     --board-w: min(calc(100% - 0.5rem), calc(var(--board-h) * 0.625));
     width: var(--board-w);
     aspect-ratio: 25 / 40;
+    margin: 0 auto;
   }
 
   .dpad {
     padding: 0.5rem;
     gap: 0.3rem;
+    margin-top: 0.3rem;
   }
 
   .dpad-btn {
@@ -411,19 +422,15 @@ body {
     justify-content: flex-start;
   }
 
-  .game-header {
-    padding: 0.3rem 0.9rem 0;
-  }
-
+  .game-header,
   .scoreboard {
-    margin: 0.3rem 0.9rem 0;
-    gap: 0.6rem;
+    display: none;
   }
 
   .board-wrap {
     --board-h: max(
       0px,
-      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 14.5rem)
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 10.5rem)
     );
     --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 0.625));
     width: var(--board-w);
