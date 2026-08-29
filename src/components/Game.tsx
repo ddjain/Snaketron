@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { COLS, ROWS } from "../game/constants.ts";
 import type { Direction, GameResult, GameState } from "../game/types.ts";
 import { renderGame, sizeCanvas } from "../rendering/canvasRenderer.ts";
@@ -42,6 +42,29 @@ export function Game({
 }: GameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const screenRef = useRef<HTMLElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const fsSupported =
+    typeof document !== "undefined" && document.fullscreenEnabled === true;
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  function toggleFullscreen() {
+    const el = screenRef.current;
+    if (!el) {
+      return;
+    }
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => {});
+    } else {
+      void el.requestFullscreen().catch(() => {});
+    }
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,13 +94,24 @@ export function Game({
   }, [gameState]);
 
   return (
-    <main className="game-screen">
+    <main className="game-screen" ref={screenRef}>
       <header className="game-header">
         <h1>SNAKE HUNT</h1>
         <p className="status" role="status" aria-live="polite">
           {connectionStatus}
           {hintDirection ? ` · last input ${DIRECTION_GLYPH[hintDirection]}` : ""}
         </p>
+        {fsSupported ? (
+          <button
+            type="button"
+            className="fs-toggle"
+            aria-pressed={isFullscreen}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            onClick={toggleFullscreen}
+          >
+            ⛶
+          </button>
+        ) : null}
       </header>
       <Scoreboard gameState={gameState} />
       <div className="board-wrap" ref={wrapRef}>

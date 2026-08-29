@@ -313,3 +313,191 @@ body {
 .dpad {
   -webkit-touch-callout: none;
 }
+
+.fs-toggle {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--btn);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  flex: 0 0 auto;
+}
+
+.fs-toggle:active,
+.fs-toggle:focus-visible {
+  outline: 2px solid var(--p1);
+  outline-offset: 2px;
+}
+
+.fs-toggle[aria-pressed="true"] {
+  border-color: var(--p1);
+  color: var(--p1);
+}
+
+/* Fullscreen (desktop / Android): no browser chrome, board fills the screen. */
+.game-screen:fullscreen {
+  max-width: 100%;
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
+}
+
+.game-screen:fullscreen .game-header {
+  padding: 0.6rem 1rem 0;
+  align-items: center;
+}
+
+.game-screen:fullscreen .board-wrap {
+  --board-h: max(0px, calc(100vh - 16.5rem));
+  --board-w: min(calc(100% - 2rem), calc(var(--board-h) * 1.6));
+  width: var(--board-w);
+  aspect-ratio: 40 / 25;
+  margin: auto;
+}
+
+.game-screen:fullscreen .controls,
+.game-screen:fullscreen .legend {
+  display: none;
+}
+
+/* Mobile: the game fills the viewport, no scrolling. */
+@media (max-width: 640px) {
+  .game-screen {
+    max-width: 100%;
+    height: 100dvh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
+  }
+
+  .game-header {
+    padding: 0.4rem 0.9rem 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .game-header h1 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .game-header .status {
+    font-size: 0.8rem;
+    text-align: right;
+    margin: 0;
+  }
+
+  .game-header .fs-toggle {
+    margin-left: auto;
+  }
+
+  .scoreboard {
+    margin: 0.35rem 0.9rem 0;
+    gap: 0.6rem;
+  }
+
+  .board-wrap {
+    --board-h: max(
+      0px,
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 18.5rem)
+    );
+    --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 1.6));
+    width: var(--board-w);
+    aspect-ratio: 40 / 25;
+    margin: auto;
+    flex: 0 0 auto;
+  }
+
+  .controls,
+  .legend {
+    display: none;
+  }
+
+  .dpad {
+    margin: 0 auto calc(max(env(safe-area-inset-bottom), 0.4rem));
+  }
+}
+
+/* Short, wide viewports (phone held in landscape): immersive with a compact
+   top row and slimmer d-pad so the board still fits without scrolling. */
+@media (max-height: 520px) and (min-width: 641px) {
+  .game-screen {
+    max-width: 100%;
+    height: 100dvh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
+  }
+
+  .game-header {
+    padding: 0.35rem 0.9rem 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .game-header h1 {
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .game-header .status {
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .game-header .fs-toggle {
+    margin-left: auto;
+  }
+
+  .scoreboard {
+    margin: 0.3rem 0.9rem 0;
+    gap: 0.6rem;
+  }
+
+  .board-wrap {
+    --board-h: max(
+      0px,
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 14.5rem)
+    );
+    --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 1.6));
+    width: var(--board-w);
+    aspect-ratio: 40 / 25;
+    margin: auto;
+    flex: 0 0 auto;
+  }
+
+  .controls,
+  .legend {
+    display: none;
+  }
+
+  .dpad {
+    margin: 0 auto 0.4rem;
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .dpad-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.15rem;
+  }
+
+  .dpad-center {
+    width: 2.75rem;
+  }
+}
