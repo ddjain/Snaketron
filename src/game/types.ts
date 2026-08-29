@@ -40,6 +40,7 @@ export type GameState = {
 
 export type GameConfig = {
   random?: () => number;
+  randomizePlayers?: boolean;
   fruitId?: () => string;
   initialState?: {
     tick?: number;

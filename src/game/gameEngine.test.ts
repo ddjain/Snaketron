@@ -1,8 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { COLS, MIN_SNAKE_LENGTH, ROWS } from "./constants.ts";
+import { COLS, MIN_SNAKE_LENGTH, ROWS, P1_START, P2_START } from "./constants.ts";
 import { createTestGame } from "./gameEngine.ts";
 import { calculateNextHead, isOppositeDirection, wrapPoint } from "./movement.ts";
 import type { Direction, Fruit, PlayerState, Point } from "./types.ts";
+
+function lcg(seed: number): () => number {
+  let state = seed >>> 0;
+  return () => {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+}
 
 const SAFE_FRUITS: Fruit[] = [
   { id: "f1", x: 0, y: 0 },
@@ -575,6 +583,36 @@ describe("wrapping tail attack", () => {
     expect(state.players.p1.snake).toHaveLength(5);
     expect(state.players.p1.score).toBe(4);
     expect(state.players.p2.snake).toHaveLength(2);
+  });
+});
+
+describe("randomized starting positions", () => {
+  it("uses fresh random spawns when randomizePlayers is enabled", () => {
+    const make = () =>
+      createTestGame({ random: lcg(11), randomizePlayers: true }).getState();
+    const a = make();
+    const b = createTestGame({
+      random: lcg(11),
+      randomizePlayers: true,
+      initialState: { status: "PLAYING" },
+    }).getState();
+    expect(a.players.p1.snake).toHaveLength(3);
+    for (const player of [a.players.p1, a.players.p2]) {
+      for (const cell of player.snake) {
+        expect(cell.x).toBeGreaterThanOrEqual(0);
+        expect(cell.x).toBeLessThan(COLS);
+        expect(cell.y).toBeGreaterThanOrEqual(0);
+        expect(cell.y).toBeLessThan(ROWS);
+      }
+    }
+    expect(a.players.p1.snake[0]).not.toEqual(a.players.p2.snake[0]);
+    expect(b.players.p1.snake[0]).toEqual(a.players.p1.snake[0]);
+  });
+
+  it("keeps the canonical fixed starts when randomizePlayers is off", () => {
+    const state = createTestGame({ random: lcg(11) }).getState();
+    expect(state.players.p1.snake[0]).toEqual(P1_START.snake[0]);
+    expect(state.players.p2.snake[0]).toEqual(P2_START.snake[0]);
   });
 });
 

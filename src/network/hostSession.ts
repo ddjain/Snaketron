@@ -60,7 +60,8 @@ export class HostSession {
     this.timers = options.timers ?? browserTimers();
     this.tickMs = options.tickMs ?? TICK_MS;
     this.countdownMs = options.countdownMs ?? 900;
-    this.createEngine = options.createEngine ?? (() => new GameEngine());
+    this.createEngine =
+      options.createEngine ?? (() => new GameEngine({ randomizePlayers: true }));
     this.engine = this.createEngine();
   }
 

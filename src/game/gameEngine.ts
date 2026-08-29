@@ -13,6 +13,7 @@ import {
 } from "./collision.ts";
 import { ensureFruitCount, fruitAt } from "./fruit.ts";
 import { calculateNextHead, isOppositeDirection } from "./movement.ts";
+import { placePlayersAtStart } from "./startPlacement.ts";
 import type {
   Direction,
   Fruit,
@@ -70,11 +71,13 @@ function mergePlayer(base: PlayerState, partial?: Partial<PlayerState>): PlayerS
 export class GameEngine {
   private state: GameState;
   private readonly random: () => number;
+  private readonly randomizePlayers: boolean;
   private fruitSeq = 1;
   private readonly fruitId: () => string;
 
   constructor(config: GameConfig = {}) {
     this.random = config.random ?? Math.random;
+    this.randomizePlayers = config.randomizePlayers ?? false;
     this.fruitId =
       config.fruitId ??
       (() => {
@@ -83,8 +86,12 @@ export class GameEngine {
         return id;
       });
 
-    const p1 = mergePlayer(defaultPlayer("p1", P1_START), config.initialState?.players?.p1);
-    const p2 = mergePlayer(defaultPlayer("p2", P2_START), config.initialState?.players?.p2);
+    const players = this.randomizePlayers
+      ? placePlayersAtStart(this.random)
+      : { p1: P1_START, p2: P2_START };
+
+    const p1 = mergePlayer(defaultPlayer("p1", players.p1), config.initialState?.players?.p1);
+    const p2 = mergePlayer(defaultPlayer("p2", players.p2), config.initialState?.players?.p2);
 
     const providedFruits = config.initialState?.fruits;
     const fruits = providedFruits
@@ -245,8 +252,11 @@ export class GameEngine {
   }
 
   reset(): void {
-    const p1 = defaultPlayer("p1", P1_START);
-    const p2 = defaultPlayer("p2", P2_START);
+    const players = this.randomizePlayers
+      ? placePlayersAtStart(this.random)
+      : { p1: P1_START, p2: P2_START };
+    const p1 = defaultPlayer("p1", players.p1);
+    const p2 = defaultPlayer("p2", players.p2);
     this.state = {
       tick: 0,
       status: "WAITING",
