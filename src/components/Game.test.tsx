@@ -41,7 +41,7 @@ describe("Game", () => {
     renderGame({});
     expect(screen.getByRole("img")).toHaveAttribute(
       "aria-label",
-      expect.stringContaining("40 by 25"),
+      expect.stringContaining("25 by 40"),
     );
     expect(screen.getByRole("status")).toHaveTextContent("Connected");
   });

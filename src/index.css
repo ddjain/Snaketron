@@ -35,11 +35,20 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
-.panel,
-.game-screen {
+.panel {
   max-width: 960px;
   margin: 0 auto;
   padding: 2.5rem 1.25rem 3rem;
+}
+
+.game-screen {
+  max-width: 100%;
+  height: 100dvh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
 }
 
 .home,
@@ -172,8 +181,15 @@ h1 {
 
 .board-wrap {
   position: relative;
-  width: min(100%, 960px);
-  aspect-ratio: 40 / 25;
+  --board-h: max(
+    0px,
+    calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 22rem)
+  );
+  --board-w: min(calc(100% - 2rem), calc(var(--board-h) * 0.625));
+  width: var(--board-w);
+  aspect-ratio: 25 / 40;
+  margin: auto;
+  flex: 0 0 auto;
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
@@ -221,6 +237,7 @@ h1 {
 .legend {
   color: var(--muted);
   font-size: 0.95rem;
+  display: none;
 }
 
 .dpad {
@@ -228,7 +245,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   gap: 0.4rem;
-  margin: 1.5rem auto 0;
+  margin: 0 auto calc(max(env(safe-area-inset-bottom), 0.4rem));
   width: fit-content;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -278,18 +295,34 @@ h1 {
 .game-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem 0;
 }
 
 .game-header h1 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 0;
 }
 
-@media (max-width: 640px) {
-  .scoreboard,
-  .game-header {
+.game-header .status {
+  font-size: 0.85rem;
+  text-align: right;
+  margin: 0;
+}
+
+.game-header .fs-toggle {
+  margin-left: auto;
+}
+
+.scoreboard {
+  margin: 0.4rem 0.9rem 0;
+  gap: 0.6rem;
+}
+
+@media (max-width: 400px) {
+  .scoreboard {
     flex-direction: column;
   }
 }
@@ -303,10 +336,6 @@ html {
 body {
   overscroll-behavior: none;
   touch-action: manipulation;
-}
-
-.dpad {
-  margin-bottom: env(safe-area-inset-bottom);
 }
 
 .board-wrap,
@@ -339,128 +368,22 @@ body {
   color: var(--p1);
 }
 
-/* Fullscreen (desktop / Android): no browser chrome, board fills the screen. */
+/* True browser fullscreen reuses the same immersive layout; just make sure the
+   fullscreen element carries the dark backdrop. */
 .game-screen:fullscreen {
-  max-width: 100%;
-  height: 100vh;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
 }
 
-.game-screen:fullscreen .game-header {
-  padding: 0.6rem 1rem 0;
-  align-items: center;
-}
-
-.game-screen:fullscreen .board-wrap {
-  --board-h: max(0px, calc(100vh - 16.5rem));
-  --board-w: min(calc(100% - 2rem), calc(var(--board-h) * 1.6));
-  width: var(--board-w);
-  aspect-ratio: 40 / 25;
-  margin: auto;
-}
-
-.game-screen:fullscreen .controls,
-.game-screen:fullscreen .legend {
-  display: none;
-}
-
-/* Mobile: the game fills the viewport, no scrolling. */
-@media (max-width: 640px) {
+/* Short, wide viewports (phone held in landscape): the board keeps the same
+   portrait ratio but is sized to fit the shorter axis, with a compact d-pad so
+   the game stays fully visible without scrolling. */
+@media (max-height: 520px) {
   .game-screen {
-    max-width: 100%;
-    height: 100dvh;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
+    justify-content: flex-start;
   }
 
   .game-header {
-    padding: 0.4rem 0.9rem 0;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .game-header h1 {
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .game-header .status {
-    font-size: 0.8rem;
-    text-align: right;
-    margin: 0;
-  }
-
-  .game-header .fs-toggle {
-    margin-left: auto;
-  }
-
-  .scoreboard {
-    margin: 0.35rem 0.9rem 0;
-    gap: 0.6rem;
-  }
-
-  .board-wrap {
-    --board-h: max(
-      0px,
-      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 18.5rem)
-    );
-    --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 1.6));
-    width: var(--board-w);
-    aspect-ratio: 40 / 25;
-    margin: auto;
-    flex: 0 0 auto;
-  }
-
-  .controls,
-  .legend {
-    display: none;
-  }
-
-  .dpad {
-    margin: 0 auto calc(max(env(safe-area-inset-bottom), 0.4rem));
-  }
-}
-
-/* Short, wide viewports (phone held in landscape): immersive with a compact
-   top row and slimmer d-pad so the board still fits without scrolling. */
-@media (max-height: 520px) and (min-width: 641px) {
-  .game-screen {
-    max-width: 100%;
-    height: 100dvh;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
-  }
-
-  .game-header {
-    padding: 0.35rem 0.9rem 0;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .game-header h1 {
-    font-size: 0.95rem;
-    margin: 0;
-  }
-
-  .game-header .status {
-    font-size: 0.8rem;
-    margin: 0;
-  }
-
-  .game-header .fs-toggle {
-    margin-left: auto;
+    padding: 0.3rem 0.9rem 0;
   }
 
   .scoreboard {
@@ -473,16 +396,10 @@ body {
       0px,
       calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 14.5rem)
     );
-    --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 1.6));
+    --board-w: min(calc(100% - 1.2rem), calc(var(--board-h) * 0.625));
     width: var(--board-w);
-    aspect-ratio: 40 / 25;
-    margin: auto;
-    flex: 0 0 auto;
-  }
-
-  .controls,
-  .legend {
-    display: none;
+    aspect-ratio: 25 / 40;
+    margin: 0.4rem auto auto;
   }
 
   .dpad {
@@ -492,12 +409,12 @@ body {
   }
 
   .dpad-btn {
-    width: 2.75rem;
-    height: 2.75rem;
-    font-size: 1.15rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
   }
 
   .dpad-center {
-    width: 2.75rem;
+    width: 2.5rem;
   }
 }

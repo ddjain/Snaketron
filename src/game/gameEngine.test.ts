@@ -47,18 +47,18 @@ function gameWith(options: {
       players: {
         p1: playerPartial(
           options.p1 ?? [
-            [5, 12],
-            [4, 12],
-            [3, 12],
+            [5, 20],
+            [4, 20],
+            [3, 20],
           ],
           options.p1Dir ?? "RIGHT",
           options.p1Extra,
         ),
         p2: playerPartial(
           options.p2 ?? [
-            [34, 12],
-            [35, 12],
-            [36, 12],
+            [19, 20],
+            [20, 20],
+            [21, 20],
           ],
           options.p2Dir ?? "LEFT",
           options.p2Extra,
@@ -72,7 +72,7 @@ describe("movement", () => {
   it("moves the snake one cell per tick", () => {
     const game = gameWith({});
     game.tick();
-    expect(game.getState().players.p1.snake[0]).toEqual({ x: 6, y: 12 });
+    expect(game.getState().players.p1.snake[0]).toEqual({ x: 6, y: 20 });
   });
 
   it("moves in the current direction", () => {
@@ -85,7 +85,7 @@ describe("movement", () => {
     const game = gameWith({ p1Dir: "RIGHT" });
     game.setInput("p1", "LEFT");
     game.tick();
-    expect(game.getState().players.p1.snake[0]).toEqual({ x: 6, y: 12 });
+    expect(game.getState().players.p1.snake[0]).toEqual({ x: 6, y: 20 });
     expect(game.getState().players.p1.direction).toBe("RIGHT");
   });
 
@@ -93,7 +93,7 @@ describe("movement", () => {
     const game = gameWith({ p1Dir: "RIGHT" });
     game.setInput("p1", "UP");
     game.tick();
-    expect(game.getState().players.p1.snake[0]).toEqual({ x: 5, y: 11 });
+    expect(game.getState().players.p1.snake[0]).toEqual({ x: 5, y: 19 });
   });
 
   it("wraps from the left edge to the right", () => {
@@ -142,14 +142,14 @@ describe("movement", () => {
 });
 
 describe("wrap helpers", () => {
-  it("maps x=-1 to 39 and x=40 to 0", () => {
-    expect(wrapPoint({ x: -1, y: 0 })).toEqual({ x: 39, y: 0 });
-    expect(wrapPoint({ x: 40, y: 0 })).toEqual({ x: 0, y: 0 });
+  it("maps x=-1 to 24 and x=25 to 0", () => {
+    expect(wrapPoint({ x: -1, y: 0 })).toEqual({ x: 24, y: 0 });
+    expect(wrapPoint({ x: 25, y: 0 })).toEqual({ x: 0, y: 0 });
   });
 
-  it("maps y=-1 to 24 and y=25 to 0", () => {
-    expect(wrapPoint({ x: 0, y: -1 })).toEqual({ x: 0, y: 24 });
-    expect(wrapPoint({ x: 0, y: 25 })).toEqual({ x: 0, y: 0 });
+  it("maps y=-1 to 39 and y=40 to 0", () => {
+    expect(wrapPoint({ x: 0, y: -1 })).toEqual({ x: 0, y: 39 });
+    expect(wrapPoint({ x: 0, y: 40 })).toEqual({ x: 0, y: 0 });
   });
 
   it("does not treat matching directions as opposite", () => {
@@ -158,7 +158,7 @@ describe("wrap helpers", () => {
   });
 
   it("calculates a wrapped next head", () => {
-    expect(calculateNextHead({ x: 0, y: 0 }, "LEFT")).toEqual({ x: 39, y: 0 });
+    expect(calculateNextHead({ x: 0, y: 0 }, "LEFT")).toEqual({ x: 24, y: 0 });
   });
 });
 
@@ -448,7 +448,7 @@ describe("simultaneous deaths", () => {
     const game = gameWith({
       p1: [[5, 5], [5, 6], [4, 6], [4, 5], [4, 4]],
       p1Dir: "LEFT",
-      p2: [[30, 20], [30, 21], [29, 21], [29, 20], [29, 19]],
+      p2: [[20, 20], [20, 21], [19, 21], [19, 20], [19, 19]],
       p2Dir: "LEFT",
     });
     game.tick();
@@ -566,7 +566,7 @@ describe("wrapping tail attack", () => {
     const game = gameWith({
       p1: [[0, 10], [1, 10], [2, 10]],
       p1Dir: "LEFT",
-      p2: [[33, 10], [34, 10], [35, 10], [36, 10], [37, 10], [38, 10], [39, 10]],
+      p2: [[24, 7], [24, 8], [24, 9], [24, 10]],
       p2Dir: "UP",
     });
     game.tick();
@@ -574,7 +574,7 @@ describe("wrapping tail attack", () => {
     expect(state.players.p1.alive).toBe(true);
     expect(state.players.p1.snake).toHaveLength(5);
     expect(state.players.p1.score).toBe(4);
-    expect(state.players.p2.snake).toHaveLength(5);
+    expect(state.players.p2.snake).toHaveLength(2);
   });
 });
 

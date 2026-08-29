@@ -114,9 +114,9 @@ describe("HostSession guest input", () => {
     expect(result.accepted).toBe(true);
     timers.fireIntervals(1);
     const state = session.getState();
-    expect(state.players.p2.snake[0]).toEqual({ x: 34, y: 11 });
-    expect(lastStateMessage(conn.sent).players.p2.snake[0]).toEqual({ x: 34, y: 11 });
-    expect(state.players.p1.snake[0]).toEqual({ x: 6, y: 12 });
+    expect(state.players.p2.snake[0]).toEqual({ x: 19, y: 19 });
+    expect(lastStateMessage(conn.sent).players.p2.snake[0]).toEqual({ x: 19, y: 19 });
+    expect(state.players.p1.snake[0]).toEqual({ x: 6, y: 20 });
   });
 
   it("rejects an invalid message and replies with a protocol error", () => {

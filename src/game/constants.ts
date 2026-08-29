@@ -1,5 +1,5 @@
-export const COLS = 40;
-export const ROWS = 25;
+export const COLS = 25;
+export const ROWS = 40;
 export const TICK_MS = 150;
 export const INITIAL_SNAKE_LENGTH = 3;
 export const MIN_SNAKE_LENGTH = 2;
@@ -11,18 +11,18 @@ export const MAX_FRUIT_SPAWN_RETRIES = 200;
 
 export const P1_START = {
   snake: [
-    { x: 5, y: 12 },
-    { x: 4, y: 12 },
-    { x: 3, y: 12 },
+    { x: 5, y: 20 },
+    { x: 4, y: 20 },
+    { x: 3, y: 20 },
   ],
   direction: "RIGHT" as const,
 };
 
 export const P2_START = {
   snake: [
-    { x: 34, y: 12 },
-    { x: 35, y: 12 },
-    { x: 36, y: 12 },
+    { x: 19, y: 20 },
+    { x: 20, y: 20 },
+    { x: 21, y: 20 },
   ],
   direction: "LEFT" as const,
 };
