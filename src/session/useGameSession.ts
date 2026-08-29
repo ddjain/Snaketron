@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Direction, GameResult, GameState } from "../game/types.ts";
 import {
   generateGameCode,
@@ -21,6 +21,7 @@ import {
   type Peer,
 } from "../network/peer.ts";
 import { applyHostPayload } from "../network/guestProtocol.ts";
+import { joinCodeFromSearch } from "../network/joinLink.ts";
 import type { ErrorCode } from "../network/protocol.ts";
 
 export type Screen = "home" | "lobby" | "countdown" | "playing" | "gameover";
@@ -57,8 +58,10 @@ const initial: SessionState = {
 };
 
 export function useGameSession() {
-  const [state, setState] = useState<SessionState>(initial);
-  const viewRef = useRef<SessionState>(initial);
+  const joinInputSeed = useMemo(() => joinCodeFromSearch(window.location.search) ?? "", []);
+  const seededInitial = useMemo<SessionState>(() => ({ ...initial, joinInput: joinInputSeed }), [joinInputSeed]);
+  const [state, setState] = useState<SessionState>(seededInitial);
+  const viewRef = useRef<SessionState>(seededInitial);
   const sessionRef = useRef<HostSession | null>(null);
   const peerRef = useRef<Peer | null>(null);
   const connRef = useRef<DataConnection | null>(null);
@@ -326,6 +329,17 @@ export function useGameSession() {
       teardown();
     });
   }, [clearTimers, handleHostPayload, patch, state.joinInput, teardown]);
+
+  const joinGameRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    joinGameRef.current = joinGame;
+  });
+
+  useEffect(() => {
+    if (joinCodeFromSearch(window.location.search)) {
+      joinGameRef.current();
+    }
+  }, []);
 
   const sendInput = useCallback(
     (direction: Direction) => {

@@ -55,7 +55,7 @@ The production build is a static frontend. PeerJS still uses the public PeerJS c
 ## How to play
 
 1. Player 1 clicks **Create game** and shares the code.
-2. Player 2 enters the code and clicks **Join game**.
+2. Player 2 enters the code and clicks **Join game** (or scans the QR shown in the host lobby to join directly).
 3. After the PeerJS connection opens, the host runs **3…2…1…GO!**.
 4. **Player 1 (host):** `W` `A` `S` `D`. **Player 2 (guest):** arrow keys.
 5. Eat fruit (`+1` score, grow by 1). Board edges wrap.

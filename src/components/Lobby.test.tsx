@@ -1,6 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import QRCode from "qrcode";
 import { Lobby } from "./Lobby.tsx";
+
+vi.mock("qrcode", () => ({
+  default: {
+    toDataURL: vi.fn().mockResolvedValue("data:image/png;base64,FAKEQR"),
+  },
+}));
 
 const originalClipboard = globalThis.navigator.clipboard;
 
@@ -44,5 +51,24 @@ describe("Lobby", () => {
     render(<Lobby code="X7K92" status="" isHost={false} onHome={onHome} />);
     fireEvent.click(screen.getByRole("button", { name: "Home" }));
     expect(onHome).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows a QR code that encodes the join link for a host", async () => {
+    render(<Lobby code="X7K92" status="Waiting for opponent..." isHost onHome={() => {}} />);
+    const img = await screen.findByAltText("QR code to join game X7K92");
+    expect(img).toHaveAttribute("src", "data:image/png;base64,FAKEQR");
+    await waitFor(() => {
+      expect(QRCode.toDataURL).toHaveBeenCalledWith(
+        expect.stringContaining("code=X7K92"),
+        expect.any(Object),
+      );
+    });
+  });
+
+  it("does not render a QR for a guest", async () => {
+    render(<Lobby code="X7K92" status="Connected" isHost={false} onHome={() => {}} />);
+    await waitFor(() => {
+      expect(screen.queryByAltText(/QR code to join/)).not.toBeInTheDocument();
+    });
   });
 });
