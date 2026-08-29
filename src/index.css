@@ -374,6 +374,35 @@ body {
   background: radial-gradient(circle at top, #15203a 0%, var(--bg) 55%);
 }
 
+/* Phone portrait: use almost the full width and go as tall as the slim
+   d-pad below allows, so the play area is as large as possible. */
+@media (max-width: 640px) {
+  .board-wrap {
+    --board-h: max(
+      0px,
+      calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 17rem)
+    );
+    --board-w: min(calc(100% - 0.5rem), calc(var(--board-h) * 0.625));
+    width: var(--board-w);
+    aspect-ratio: 25 / 40;
+  }
+
+  .dpad {
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .dpad-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.25rem;
+  }
+
+  .dpad-center {
+    width: 2.75rem;
+  }
+}
+
 /* Short, wide viewports (phone held in landscape): the board keeps the same
    portrait ratio but is sized to fit the shorter axis, with a compact d-pad so
    the game stays fully visible without scrolling. */
