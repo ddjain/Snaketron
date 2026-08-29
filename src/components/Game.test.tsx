@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { createTestGame } from "../game/gameEngine.ts";
 import type { GameState } from "../game/types.ts";
 import { Game } from "./Game.tsx";
@@ -28,6 +28,7 @@ function renderGame(overrides: Partial<Parameters<typeof Game>[0]>) {
       disconnectNote={null}
       connectionStatus="Connected"
       hintDirection={null}
+      onSteer={() => {}}
       onPlayAgain={() => {}}
       onHome={() => {}}
       {...overrides}
@@ -69,6 +70,15 @@ describe("Game", () => {
     renderGame({ hintDirection: "UP" });
     expect(screen.getByRole("status")).toHaveTextContent("Connected");
     expect(screen.getByRole("status")).toHaveTextContent("last input ▲");
+  });
+
+  it("steers via the on-screen d-pad", () => {
+    const onSteer = vi.fn();
+    renderGame({ onSteer });
+    fireEvent.click(screen.getByRole("button", { name: "Steer up" }));
+    fireEvent.click(screen.getByRole("button", { name: "Steer left" }));
+    expect(onSteer).toHaveBeenCalledWith("UP");
+    expect(onSteer).toHaveBeenCalledWith("LEFT");
   });
 
   it("shows the game-over dialog when the game is finished", () => {

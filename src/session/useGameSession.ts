@@ -392,6 +392,7 @@ export function useGameSession() {
     joinGame,
     goHome,
     playAgain,
+    steer: sendInput,
     setJoinInput,
   };
 }

@@ -223,6 +223,44 @@ h1 {
   font-size: 0.95rem;
 }
 
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 1.25rem auto 0;
+  width: fit-content;
+  user-select: none;
+}
+
+.dpad-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dpad-btn {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--border, #3a4a6b);
+  border-radius: 0.5rem;
+  background: #141c30;
+  color: #dfe8ff;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dpad-btn:active {
+  background: #23304d;
+  transform: translateY(1px);
+}
+
+.dpad-center {
+  width: 3rem;
+}
+
 .game-header {
   display: flex;
   justify-content: space-between;

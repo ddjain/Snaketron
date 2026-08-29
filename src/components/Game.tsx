@@ -15,6 +15,7 @@ type GameProps = {
   disconnectNote: string | null;
   connectionStatus: string;
   hintDirection: Direction | null;
+  onSteer: (direction: Direction) => void;
   onPlayAgain: () => void;
   onHome: () => void;
 };
@@ -35,6 +36,7 @@ export function Game({
   disconnectNote,
   connectionStatus,
   hintDirection,
+  onSteer,
   onPlayAgain,
   onHome,
 }: GameProps) {
@@ -110,6 +112,43 @@ export function Game({
         Green snake: Player 1 (WASD). Blue snake: Player 2 (arrows). Eat fruit to grow.
         Hit the opponent tail to hunt. Avoid bodies. Last snake alive wins.
       </p>
+      <div className="dpad" aria-label="Touch controls" role="group">
+        <button
+          type="button"
+          className="dpad-btn up"
+          aria-label="Steer up"
+          onClick={() => onSteer("UP")}
+        >
+          ▲
+        </button>
+        <div className="dpad-row">
+          <button
+            type="button"
+            className="dpad-btn left"
+            aria-label="Steer left"
+            onClick={() => onSteer("LEFT")}
+          >
+            ◀
+          </button>
+          <span className="dpad-center" aria-hidden="true"></span>
+          <button
+            type="button"
+            className="dpad-btn right"
+            aria-label="Steer right"
+            onClick={() => onSteer("RIGHT")}
+          >
+            ▶
+          </button>
+        </div>
+        <button
+          type="button"
+          className="dpad-btn down"
+          aria-label="Steer down"
+          onClick={() => onSteer("DOWN")}
+        >
+          ▼
+        </button>
+      </div>
     </main>
   );
 }

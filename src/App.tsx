@@ -4,7 +4,7 @@ import { Lobby } from "./components/Lobby.tsx";
 import { useGameSession } from "./session/useGameSession.ts";
 
 export default function App() {
-  const { state, createGame, joinGame, goHome, playAgain, setJoinInput } = useGameSession();
+  const { state, createGame, joinGame, goHome, playAgain, steer, setJoinInput } = useGameSession();
 
   if (state.screen === "home") {
     return (
@@ -58,6 +58,7 @@ export default function App() {
       disconnectNote={state.disconnectNote}
       connectionStatus={state.connectionStatus}
       hintDirection={state.hintDirection}
+      onSteer={steer}
       onPlayAgain={playAgain}
       onHome={goHome}
     />
